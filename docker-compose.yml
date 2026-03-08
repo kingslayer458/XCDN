@@ -1,0 +1,14 @@
+services:
+  xcdn:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: xcdn
+    ports:
+      - "7000:7000"
+    environment:
+      PORT: 7000
+      MAX_UPLOAD_MB: 5120
+    volumes:
+      - ./storage:/app/storage
+    restart: unless-stopped
