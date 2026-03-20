@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Docker Check') {
+            steps {
+                withCredentials([string(credentialsId: 'server-ip', variable: 'SERVER_IP')]) {
+                    sshagent(['prod-ssh-key']) {
+                        sh '''
+                        echo "Connecting to $SERVER_IP"
+
+                        ssh -o StrictHostKeyChecking=no ubuntu@$SERVER_IP << 'EOF'
+
+                        echo "[+] Connected successfully"
+
+                        docker ps
+                        docker images
+
+                        EOF
+                        '''
+                    }
+                }
+            }
+        }
+    }
+}
